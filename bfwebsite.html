@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Boyfriend Day! 💕✨</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            blush: '#FFCAD4',
+                            rose: '#FFE5EC',
+                            peach: '#FFD8BE',
+                            lavender: '#E2ECE9',
+                            cream: '#FFF1E6',
+                            mint: '#D8E2DC',
+                            purple: '#E0BBE4',
+                            text: '#5C4B51',
+                            subtext: '#8E7C82'
+                        }
+                    },
+                    fontFamily: {
+                        outfit: ['Outfit', 'sans-serif'],
+                        fredoka: ['Fredoka', 'cursive'],
+                        caveat: ['Caveat', 'cursive']
+                    },
+                    boxShadow: {
+                        'pastel-glow': '0 10px 30px rgba(255, 182, 193, 0.4)',
+                        'glass-card': '0 8px 32px 0 rgba(255, 182, 193, 0.25)',
+                        'cute-press': 'inset 0 2px 4px rgba(0,0,0,0.06)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: linear-gradient(-45deg, #FFE5EC, #FFCAD4, #FFD8BE, #E0BBE4, #D8E2DC);
+            background-size: 400% 400%;
+            animation: gradientMesh 18s ease infinite;
+            color: #5C4B51;
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientMesh {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism Panels */
+        .glass-box {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 12px 35px rgba(255, 182, 193, 0.2);
+        }
+
+        .glass-box-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .glass-box-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 20px 40px rgba(255, 170, 185, 0.35);
+        }
+
+        /* Washi Tape Graphic Element */
+        .washi-tape {
+            background: rgba(255, 255, 255, 0.65);
+            border-left: 2px dotted rgba(255, 182, 193, 0.8);
+            border-right: 2px dotted rgba(255, 182, 193, 0.8);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        /* Floating Animation */
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+        .animate-float {
+            animation: gentleFloat 5s ease-in-out infinite;
+        }
+
+        /* Floating Hearts Particles */
+        .floating-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatUp 6s linear infinite;
+            opacity: 0.7;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        /* Wax Envelope Styles */
+        .envelope-container {
+            perspective: 1000px;
+        }
+        .envelope-flap {
+            transform-origin: top;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .envelope-letter {
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .envelope-opened .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+        .envelope-opened .envelope-letter {
+            transform: translateY(-140px);
+            z-index: 30;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.3); }
+        ::-webkit-scrollbar-thumb { background: #FFCAD4; border-radius: 10px; }
+
+        /* Typewriter Cursor */
+        .typewriter-cursor::after {
+            content: '💖';
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+
+<body class="relative min-h-screen pb-16">
+
+    <!-- Floating Hearts & Particle Canvas Container -->
+    <div id="particleContainer" class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- Floating Top Bar / Controls -->
+    <header class="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 flex items-center gap-3">
+        <!-- Audio Synthesizer Toggle -->
+        <button id="musicToggleBtn" onclick="toggleMusic()" class="glass-box px-4 py-2 rounded-full font-fredoka text-sm text-pastel-text flex items-center gap-2 shadow-sm hover:scale-105 active:scale-95 transition-all">
+            <span id="musicIcon">🎵</span>
+            <span id="musicStatusText">Cozy Melody: Off</span>
+        </button>
+
+        <!-- Customization Panel Trigger -->
+        <button onclick="toggleDrawer()" class="glass-box w-11 h-11 rounded-full flex items-center justify-center text-pastel-text shadow-sm hover:rotate-45 active:scale-95 transition-all" title="Customize Experience">
+            <i class="fa-solid fa-gear text-lg"></i>
+        </button>
+    </header>
+
+    <main class="relative z-10 max-w-5xl mx-auto px-4 pt-12 sm:pt-16">
+        
+        <!-- Hero Header -->
+        <section class="text-center mb-12 animate-float">
+            <!-- Cute Sticker Badge -->
+            <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-box text-pastel-text font-fredoka text-sm mb-6 shadow-sm border border-white">
+                <span>✨</span>
+                <span>OCTOBER SPECIAL • HAPPY BOYFRIEND DAY</span>
+                <span>💕</span>
+            </div>
+
+            <!-- Greeting Headline -->
+            <h1 class="font-fredoka text-4xl sm:text-6xl md:text-7xl text-pastel-text drop-shadow-sm mb-4 leading-tight">
+                To My Favorite Person,<br>
+                <span id="displayBoyfriendName" class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 underline decoration-wavy decoration-pink-300">
+                    Subham
+                </span>! 🧸✨
+            </h1>
+
+            <p class="font-outfit text-base sm:text-xl text-pastel-subtext max-w-xl mx-auto font-medium">
+                I made a dreamy interactive scrapbook just for you today. Tap each gift card below to open your surprises!
+            </p>
+        </section>
+
+        <!-- Bento Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-16">
+            
+            <!-- Hero Photo Card (Span 3 or Centered) -->
+            <div class="md:col-span-3 glass-box rounded-[2.5rem] p-6 sm:p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+                <!-- Decorative Washi Tape -->
+                <div class="washi-tape absolute -top-3 left-12 w-28 h-8 rotate-[-3deg] z-20"></div>
+                <div class="washi-tape absolute -bottom-3 right-12 w-28 h-8 rotate-[2deg] z-20"></div>
+
+                <!-- Profile Frame with Cute Sparkles -->
+                <div class="relative w-44 h-44 sm:w-52 sm:h-52 shrink-0">
+                    <div class="w-full h-full rounded-[2rem] overflow-hidden border-4 border-white shadow-md bg-pastel-rose relative">
+                        <img id="heroImage" src="https://lh3.googleusercontent.com/d/1gwMBl8PC42dc6m4owx1HAAm9Q_L8giOK" alt="Boyfriend Photo" class="w-full h-full object-cover">
+                    </div>
+                    <span class="absolute -bottom-3 -right-3 bg-white w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-md border border-pastel-blush">👑</span>
+                </div>
+
+                <!-- Text Content & Quote -->
+                <div class="flex-1 text-center md:text-left">
+                    <div class="inline-block px-3 py-1 rounded-full bg-pastel-blush/60 text-pastel-text text-xs font-bold font-fredoka mb-3">
+                        💌 TODAY'S VIBE: 100% LOVED
+                    </div>
+                    <h2 class="font-fredoka text-2xl sm:text-3xl text-pastel-text mb-3">
+                        "In a world full of ordinary days, being with you makes every moment feel like magic."
+                    </h2>
+                    <p class="font-caveat text-xl sm:text-2xl text-pink-600">
+                        — Forever & Always Yours 💕
+                    </p>
+                </div>
+            </div>
+
+            <!-- GIFT CARD #1: Polaroid Scrapbook -->
+            <div onclick="openModal('galleryModal')" class="glass-box glass-box-hover rounded-[2rem] p-6 cursor-pointer flex flex-col items-center text-center relative group overflow-hidden border-2 border-white">
+                <div class="washi-tape absolute top-3 right-8 w-16 h-6 rotate-[-5deg]"></div>
+                
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-pink-200 to-rose-100 flex items-center justify-center text-4xl mb-4 shadow-inner group-hover:scale-110 transition-transform">
+                    📸
+                </div>
+                
+                <span class="px-3 py-1 rounded-full bg-pink-100 text-pink-700 font-fredoka text-xs font-semibold mb-2">GIFT #1</span>
+                <h3 class="font-fredoka text-2xl text-pastel-text mb-2">Our Memories</h3>
+                <p class="text-pastel-subtext text-sm font-medium">A cute Polaroid album filled with our favorite snapshots!</p>
+                
+                <button class="mt-6 px-5 py-2 rounded-full bg-white text-pastel-text font-fredoka text-sm shadow-sm border border-pastel-blush group-hover:bg-pastel-blush transition-colors">
+                    Open Gallery ✨
+                </button>
+            </div>
+
+            <!-- GIFT CARD #2: Love Letter -->
+            <div onclick="openModal('letterModal')" class="glass-box glass-box-hover rounded-[2rem] p-6 cursor-pointer flex flex-col items-center text-center relative group overflow-hidden border-2 border-white">
+                <div class="washi-tape absolute top-3 left-8 w-16 h-6 rotate-[4deg]"></div>
+                
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-purple-200 to-pink-100 flex items-center justify-center text-4xl mb-4 shadow-inner group-hover:scale-110 transition-transform">
+                    💌
+                </div>
+                
+                <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-700 font-fredoka text-xs font-semibold mb-2">GIFT #2</span>
+                <h3 class="font-fredoka text-2xl text-pastel-text mb-2">Love Mail</h3>
+                <p class="text-pastel-subtext text-sm font-medium">A wax-sealed heartfelt message straight from my heart.</p>
+                
+                <button class="mt-6 px-5 py-2 rounded-full bg-white text-pastel-text font-fredoka text-sm shadow-sm border border-pastel-blush group-hover:bg-pastel-purple transition-colors">
+                    Unseal Letter 🕊️
+                </button>
+            </div>
+
+            <!-- GIFT CARD #3: Scratch Coupon & Love Jar -->
+            <div onclick="openModal('scratchModal')" class="glass-box glass-box-hover rounded-[2rem] p-6 cursor-pointer flex flex-col items-center text-center relative group overflow-hidden border-2 border-white">
+                <div class="washi-tape absolute top-3 right-8 w-16 h-6 rotate-[-3deg]"></div>
+                
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-peach-200 to-amber-100 flex items-center justify-center text-4xl mb-4 shadow-inner group-hover:scale-110 transition-transform">
+                    🎟️
+                </div>
+                
+                <span class="px-3 py-1 rounded-full bg-peach-100 text-amber-800 font-fredoka text-xs font-semibold mb-2">GIFT #3</span>
+                <h3 class="font-fredoka text-2xl text-pastel-text mb-2">Love Coupons & Jar</h3>
+                <p class="text-pastel-subtext text-sm font-medium">Scratch off golden tickets + draw cute notes from the Jar of Love!</p>
+                
+                <button class="mt-6 px-5 py-2 rounded-full bg-white text-pastel-text font-fredoka text-sm shadow-sm border border-pastel-blush group-hover:bg-pastel-peach transition-colors">
+                    Scratch Ticket 🎁
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Interactive "Jar of Love Reasons" Widget Section -->
+        <section class="glass-box rounded-[2.5rem] p-8 text-center relative overflow-hidden border-2 border-white">
+            <div class="max-w-xl mx-auto">
+                <span class="text-4xl mb-2 block animate-bounce">🫙✨</span>
+                <h3 class="font-fredoka text-3xl text-pastel-text mb-2">The Jar of 100 Love Reasons</h3>
+                <p class="text-pastel-subtext text-sm mb-6 font-medium">Need a quick reminder of why you're so special? Pick a virtual note from the jar!</p>
+                
+                <button onclick="drawLoveReason()" class="px-8 py-3 rounded-full bg-gradient-to-r from-pink-400 to-rose-400 text-white font-fredoka text-base shadow-md hover:shadow-lg hover:scale-105 active:scale-95 transition-all">
+                    💌 Pull a Sweet Note!
+                </button>
+
+                <!-- Output Note Display Box -->
+                <div id="loveReasonDisplay" class="hidden mt-6 p-6 rounded-2xl bg-white/80 border-2 border-pink-200 shadow-inner font-caveat text-2xl text-pink-700 animate-fade-in relative">
+                    <span id="loveReasonText">"You always know how to make me laugh even on hard days."</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ==================== MODAL 1: POLAROID GALLERY ==================== -->
+    <div id="galleryModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="glass-box w-full max-w-4xl max-h-[85vh] rounded-[2.5rem] flex flex-col overflow-hidden bg-white/80 border-2 border-white shadow-2xl">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-pastel-blush/40 flex justify-between items-center bg-white/50">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">📸</span>
+                    <h3 class="font-fredoka text-2xl text-pastel-text">Our Polaroid Album</h3>
+                </div>
+                <button onclick="closeModal('galleryModal')" class="w-10 h-10 rounded-full bg-white/80 flex items-center justify-center text-pastel-text hover:bg-pastel-rose transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Album Content Area -->
+            <div class="p-6 overflow-y-auto flex-1">
+                <!-- Quick Upload Header -->
+                <div class="mb-8 p-4 rounded-2xl bg-pastel-rose/40 border border-pastel-blush flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <p class="font-fredoka text-pastel-text text-sm">Add your own pictures to this memory album!</p>
+                        <p class="text-xs text-pastel-subtext">Click any photo to view in full size.</p>
+                    </div>
+                    <label class="cursor-pointer px-5 py-2 rounded-full bg-pink-400 hover:bg-pink-500 text-white font-fredoka text-sm shadow-sm transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Upload Memory
+                        <input type="file" accept="image/*" class="hidden" onchange="uploadGalleryPhoto(event)">
+                    </label>
+                </div>
+
+                <!-- Gallery Grid with Polaroid Frames -->
+                <div id="polaroidGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <!-- Dynamic Content populated via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Enlarge Lightbox Modal -->
+    <div id="lightboxModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300" onclick="closeLightbox()">
+        <div class="max-w-xl w-full bg-white p-4 rounded-2xl shadow-2xl relative" onclick="event.stopPropagation()">
+            <img id="lightboxImg" src="" alt="Enlarged Memory" class="w-full h-auto max-h-[75vh] object-contain rounded-xl">
+            <p id="lightboxCaption" class="font-caveat text-2xl text-center text-pastel-text mt-3"></p>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 2: WAX SEALED LOVE LETTER ==================== -->
+    <div id="letterModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="glass-box w-full max-w-xl rounded-[2.5rem] p-6 sm:p-8 relative bg-white/85 shadow-2xl border-2 border-white">
+            
+            <!-- Close Button -->
+            <button onclick="closeModal('letterModal')" class="absolute top-5 right-5 z-40 w-10 h-10 rounded-full bg-white flex items-center justify-center text-pastel-text shadow-sm hover:bg-pastel-rose transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Title -->
+            <div class="text-center mb-6">
+                <h3 class="font-fredoka text-3xl text-pastel-text">A Mail For You 💌</h3>
+                <p id="envelopeStatusText" class="text-sm font-medium text-pastel-subtext mt-1">Tap the wax seal stamp to open your letter!</p>
+            </div>
+
+            <!-- Interactive Wax Envelope Component -->
+            <div class="envelope-container relative w-full max-w-sm mx-auto h-56 my-8">
+                <div id="envelopeWrapper" class="relative w-full h-full bg-pastel-blush rounded-xl shadow-md border-2 border-pink-200 overflow-visible cursor-pointer" onclick="toggleWaxEnvelope()">
+                    
+                    <!-- Letter Paper inside envelope -->
+                    <div id="envelopeLetter" class="envelope-letter absolute inset-x-3 bottom-3 h-48 bg-pastel-cream rounded-lg p-5 shadow-sm border border-amber-100 flex flex-col justify-between overflow-y-auto">
+                        <div>
+                            <h4 class="font-fredoka text-pink-600 text-lg mb-2">My Dearest <span class="letterBoyfriendName">Baby</span>,</h4>
+                            <p id="typewriterTarget" class="font-outfit text-sm text-pastel-text leading-relaxed whitespace-pre-line font-medium"></p>
+                        </div>
+                        <p id="letterSign" class="font-caveat text-xl text-pink-500 text-right mt-4 opacity-0 transition-opacity duration-1000">
+                            With all my love, <br>Forever Yours 💕
+                        </p>
+                    </div>
+
+                    <!-- Front Envelope Triangles -->
+                    <div class="absolute inset-0 pointer-events-none z-20">
+                        <div class="absolute bottom-0 inset-x-0 border-b-[110px] border-b-rose-200 border-x-[180px] border-x-transparent"></div>
+                    </div>
+
+                    <!-- Envelope Top Flap -->
+                    <div class="envelope-flap absolute top-0 inset-x-0 border-t-[110px] border-t-rose-300 border-x-[180px] border-x-transparent z-25 flex justify-center">
+                        <!-- Wax Seal Stamp -->
+                        <div id="waxSeal" class="absolute -bottom-14 w-12 h-12 rounded-full bg-rose-500 border-2 border-rose-600 shadow-md flex items-center justify-center text-white text-lg transition-transform hover:scale-110 active:scale-95">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button id="resetLetterBtn" onclick="resetEnvelopeState()" class="hidden text-xs font-fredoka text-pastel-subtext hover:text-pastel-text underline underline-offset-4">
+                    Close & Reseal Envelope
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 3: SCRATCH COUPONS ==================== -->
+    <div id="scratchModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="glass-box w-full max-w-lg rounded-[2.5rem] p-6 sm:p-8 relative bg-white/85 shadow-2xl border-2 border-white text-center">
+            
+            <button onclick="closeModal('scratchModal')" class="absolute top-5 right-5 z-40 w-10 h-10 rounded-full bg-white flex items-center justify-center text-pastel-text shadow-sm hover:bg-pastel-rose transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <span class="text-5xl block mb-2">🎟️✨</span>
+            <h3 class="font-fredoka text-3xl text-pastel-text mb-1">Golden Scratch Ticket</h3>
+            <p class="text-sm font-medium text-pastel-subtext mb-6">Scratch the golden area with your touch or mouse to reveal your reward!</p>
+
+            <!-- Ticket Container -->
+            <div class="relative w-full max-w-sm mx-auto h-44 rounded-2xl overflow-hidden shadow-lg border-2 border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 flex">
+                
+                <!-- Ticket Left Stub -->
+                <div class="w-1/3 border-r-2 border-dashed border-amber-300 p-3 flex flex-col items-center justify-center text-center bg-amber-100/50">
+                    <span class="font-fredoka text-[10px] text-amber-700 tracking-wider uppercase mb-1">BOYFRIEND DAY</span>
+                    <i class="fa-solid fa-ticket text-2xl text-amber-500 mb-1"></i>
+                    <span class="font-outfit text-[10px] text-amber-800 font-bold">NO. 1002</span>
+                </div>
+
+                <!-- Ticket Reveal Area -->
+                <div class="w-2/3 relative flex flex-col items-center justify-center p-4">
+                    <span class="text-xs font-fredoka text-pink-600 mb-1 uppercase tracking-wide">YOU REVEALED:</span>
+                    <span id="scratchRewardText" class="font-fredoka text-lg text-pastel-text text-center leading-snug">
+                        1x Romantic Dinner Date & Warm Hugs! 🍕💖
+                    </span>
+
+                    <!-- Scratch Off Canvas Layer -->
+                    <canvas id="scratchCanvas" class="absolute inset-0 z-20 cursor-pointer touch-none"></canvas>
+                </div>
+            </div>
+
+            <!-- Draw New Ticket Button -->
+            <button onclick="resetScratchTicket()" class="mt-6 px-6 py-2.5 rounded-full bg-white text-pastel-text font-fredoka text-sm shadow-sm hover:bg-pastel-peach transition-all border border-pastel-blush inline-flex items-center gap-2">
+                <i class="fa-solid fa-rotate-right"></i> Draw Another Coupon
+            </button>
+
+        </div>
+    </div>
+
+    <!-- ==================== SIDE DRAWER: QUICK CUSTOMIZATION ==================== -->
+    <div id="customDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl p-6 transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
+            <h3 class="font-fredoka text-2xl text-pastel-text flex items-center gap-2">
+                ⚙️ Customize Website
+            </h3>
+            <button onclick="toggleDrawer()" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="space-y-6">
+            <!-- Edit Name -->
+            <div>
+                <label class="block font-fredoka text-sm text-pastel-text mb-2">Boyfriend's Name</label>
+                <input type="text" id="inputName" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 font-outfit text-sm" placeholder="Subham">
+            </div>
+
+            <!-- Edit Hero Image -->
+            <div>
+                <label class="block font-fredoka text-sm text-pastel-text mb-2">Hero Profile Image</label>
+                <input type="file" accept="image/*" onchange="updateHeroImage(event)" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100">
+            </div>
+
+            <!-- Edit Love Letter -->
+            <div>
+                <label class="block font-fredoka text-sm text-pastel-text mb-2">Love Letter Message</label>
+                <textarea id="inputLetter" rows="5" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 font-outfit text-sm leading-relaxed" placeholder="Write your letter here..."></textarea>
+            </div>
+
+            <!-- Edit Custom Scratch Reward -->
+            <div>
+                <label class="block font-fredoka text-sm text-pastel-text mb-2">Scratch Coupon Reward</label>
+                <input type="text" id="inputReward" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-pink-400 font-outfit text-sm" placeholder="1x Movie Marathon & Ice Cream Date 🍦">
+            </div>
+
+            <button onclick="saveCustomizations()" class="w-full py-3 rounded-full bg-pink-500 hover:bg-pink-600 text-white font-fredoka text-base shadow-md transition-all">
+                💾 Save Changes
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- APPLICATION STATE ---
+        const appState = {
+            boyfriendName: "Subham",
+            heroPhoto: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80",
+            letterMessage: "Happy Boyfriend Day!\n\nHaving you in my life feels like a warm cup of coffee on a rainy afternoon. You bring so much peace, laughter, and joy into my world.\n\nThank you for always holding my hand, making me laugh, and being my biggest supporter. I love you endlessly! ☁️💖",
+            gallery: [
+                { url: "https://lh3.googleusercontent.com/d/1F9na_-SG2BAQ76AAqJMBSjdWBVy4rE3o", title: "Party in Amsterdam" },
+                { url: "https://lh3.googleusercontent.com/d/1VRxeb-S4Cev8oBvrzwDPMNCzO8m9mQxN", title: "Romance in Ship" },
+                { url: "https://lh3.googleusercontent.com/d/1NwOJDalPPkIPtQYUk3su--VHxa3zPpDO", title: "Hyderabad Evening strolls" },
+                { url: "https://lh3.googleusercontent.com/d/1_X91slOejsdK33kZm2DoPjnpl_z7sPBm", title: "Trip to Goa" },
+                { url: "https://lh3.googleusercontent.com/d/1cYbb-81kvYLLw5jODlfSiNROd1D7AKCH", title: "Favorite Night Date" },
+                { url: "https://lh3.googleusercontent.com/d/1LnSUY9wVrLcsup9WejijQkPkXauQkuAd", title: "First trip to Mountains" }
+               
+            ],
+            coupons: [
+                "1x Romantic Dinner Date of Your Choice 🍕✨",
+                "Unlimited Warm Hugs & Cuddles 🧸💖",
+                "Late Night Movie Date & Snacks 🍿🎬",
+                "10x Kisses Free Pass 🎟️"
+            ],
+            reasons: [
+                "You make me smile even on my hardest days. 😊",
+                "The way your eyes light up when you're excited.",
+                "Your warm hugs feel like home.",
+                "You always remember the little things I like.",
+                "You are my favorite person to talk to about everything.",
+                "Your kindness and gentle heart.",
+                "You make ordinary moments feel so magical. ✨"
+            ]
+        };
+
+        // --- WEB AUDIO API SYNTHESIZER ---
+        let audioCtx;
+        let isMusicPlaying = false;
+        let musicInterval;
+
+        function initAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playPopSound() {
+            try {
+                initAudioContext();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.08);
+                
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.08);
+            } catch(e) {}
+        }
+
+        function toggleMusic() {
+            initAudioContext();
+            isMusicPlaying = !isMusicPlaying;
+            
+            const statusText = document.getElementById('musicStatusText');
+            const icon = document.getElementById('musicIcon');
+
+            if (isMusicPlaying) {
+                statusText.textContent = "Cozy Melody: Playing 🎶";
+                icon.textContent = "🔊";
+                startLullabyMelody();
+            } else {
+                statusText.textContent = "Cozy Melody: Off";
+                icon.textContent = "🎵";
+                clearInterval(musicInterval);
+            }
+        }
+
+        function startLullabyMelody() {
+            const notes = [261.63, 329.63, 392.00, 440.00, 523.25]; // C, E, G, A, C5 Pentatonic
+            let step = 0;
+
+            musicInterval = setInterval(() => {
+                if (!isMusicPlaying) return;
+                try {
+                    const freq = notes[step % notes.length];
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 1.2);
+
+                    step = (step + Math.floor(Math.random() * 2) + 1);
+                } catch(e) {}
+            }, 600);
+        }
+
+        // --- STREAMING_CHUNK:Initializing state rendering and floating particle animations... ---
+        // --- FLOATING HEARTS PARTICLES ---
+        function createHeartParticle() {
+            const container = document.getElementById('particleContainer');
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = ['💕', '✨', '💖', '☁️', '🌸'][Math.floor(Math.random() * 5)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 14 + 14) + 'px';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 7000);
+        }
+        setInterval(createHeartParticle, 800);
+
+        // --- MODAL CONTROLS ---
+        function openModal(id) {
+            playPopSound();
+            const modal = document.getElementById(id);
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            
+            if (id === 'galleryModal') renderGallery();
+            if (id === 'scratchModal') initScratchCard();
+        }
+
+        function closeModal(id) {
+            playPopSound();
+            const modal = document.getElementById(id);
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            if (id === 'letterModal') resetEnvelopeState();
+        }
+
+        // --- POLAROID GALLERY ---
+        function renderGallery() {
+            const grid = document.getElementById('polaroidGrid');
+            grid.innerHTML = '';
+            
+            appState.gallery.forEach((item, index) => {
+                const rotation = (index % 2 === 0 ? '-3deg' : '3deg');
+                grid.innerHTML += `
+                    <div onclick="openLightbox('${item.url}', '${item.title}')" class="bg-white p-4 rounded-xl shadow-md cursor-pointer hover:scale-105 transition-transform relative group border border-gray-100" style="transform: rotate(${rotation});">
+                        <div class="washi-tape absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 rotate-1 z-10"></div>
+                        <div class="w-full h-48 bg-gray-100 rounded-lg overflow-hidden mb-3">
+                            <img src="${item.url}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <p class="font-caveat text-xl text-center text-pastel-text">${item.title}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function uploadGalleryPhoto(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    appState.gallery.unshift({
+                        url: event.target.result,
+                        title: "Sweet Memory ✨"
+                    });
+                    renderGallery();
+                    playPopSound();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function openLightbox(url, caption) {
+            playPopSound();
+            document.getElementById('lightboxImg').src = url;
+            document.getElementById('lightboxCaption').textContent = caption;
+            document.getElementById('lightboxModal').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeLightbox() {
+            playPopSound();
+            document.getElementById('lightboxModal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // --- STREAMING_CHUNK:Implementing Typewriter Love Letter & Envelope Wax Seal logic... ---
+        // --- LOVE LETTER & ENVELOPE LOGIC ---
+        let isEnvelopeOpen = false;
+        let typewriterTimeout;
+
+        function toggleWaxEnvelope() {
+            if (isEnvelopeOpen) return;
+            isEnvelopeOpen = true;
+
+            playPopSound();
+            const wrapper = document.getElementById('envelopeWrapper');
+            const statusText = document.getElementById('envelopeStatusText');
+            const resetBtn = document.getElementById('resetLetterBtn');
+
+            wrapper.classList.add('envelope-opened');
+            statusText.textContent = "Scroll to read your heartfelt note 💌";
+
+            setTimeout(startTypewriter, 800);
+            setTimeout(() => resetBtn.classList.remove('hidden'), 1500);
+
+            // Confetti Burst
+            confetti({
+                particleCount: 50,
+                spread: 60,
+                origin: { y: 0.7 }
+            });
+        }
+
+        function resetEnvelopeState() {
+            clearTimeout(typewriterTimeout);
+            isEnvelopeOpen = false;
+
+            const wrapper = document.getElementById('envelopeWrapper');
+            const target = document.getElementById('typewriterTarget');
+            const sign = document.getElementById('letterSign');
+            const statusText = document.getElementById('envelopeStatusText');
+            const resetBtn = document.getElementById('resetLetterBtn');
+
+            wrapper.classList.remove('envelope-opened');
+            target.textContent = '';
+            sign.classList.add('opacity-0');
+            statusText.textContent = "Tap the wax seal stamp to open your letter!";
+            resetBtn.classList.add('hidden');
+        }
+
+        function startTypewriter() {
+            const target = document.getElementById('typewriterTarget');
+            const sign = document.getElementById('letterSign');
+            target.textContent = '';
+            target.classList.add('typewriter-cursor');
+
+            let index = 0;
+            const text = appState.letterMessage;
+
+            function type() {
+                if (index < text.length) {
+                    target.textContent += text.charAt(index);
+                    index++;
+                    typewriterTimeout = setTimeout(type, 30);
+                } else {
+                    target.classList.remove('typewriter-cursor');
+                    sign.classList.remove('opacity-0');
+                }
+            }
+            type();
+        }
+
+        // --- STREAMING_CHUNK:Building HTML5 Scratch Off Canvas Ticket logic... ---
+        // --- SCRATCH CARD LOGIC ---
+        let scratchCtx;
+        let isScratching = false;
+
+        function initScratchCard() {
+            const canvas = document.getElementById('scratchCanvas');
+            if (!canvas) return;
+            
+            scratchCtx = canvas.getContext('2d', { willReadFrequently: true });
+            const parent = canvas.parentElement;
+
+            canvas.width = parent.offsetWidth;
+            canvas.height = parent.offsetHeight;
+
+            fillScratchCover();
+
+            canvas.onmousedown = (e) => { isScratching = true; scratch(e); };
+            canvas.onmouseup = () => isScratching = false;
+            canvas.onmousemove = scratch;
+
+            canvas.ontouchstart = (e) => { isScratching = true; scratch(e.touches[0]); e.preventDefault(); };
+            canvas.ontouchend = () => isScratching = false;
+            canvas.ontouchmove = (e) => { scratch(e.touches[0]); e.preventDefault(); };
+        }
+
+        function fillScratchCover() {
+            const canvas = document.getElementById('scratchCanvas');
+            scratchCtx.globalCompositeOperation = 'source-over';
+
+            // Golden Gradient
+            const grad = scratchCtx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            grad.addColorStop(0, '#FCD34D');
+            grad.addColorStop(0.5, '#F59E0B');
+            grad.addColorStop(1, '#FBBF24');
+
+            scratchCtx.fillStyle = grad;
+            scratchCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+            scratchCtx.fillStyle = '#78350F';
+            scratchCtx.font = 'bold 14px Fredoka, sans-serif';
+            scratchCtx.textAlign = 'center';
+            scratchCtx.textBaseline = 'middle';
+            scratchCtx.fillText('✨ SCRATCH HERE ✨', canvas.width / 2, canvas.height / 2);
+
+            scratchCtx.globalCompositeOperation = 'destination-out';
+        }
+
+        function scratch(e) {
+            if (!isScratching) return;
+            const canvas = document.getElementById('scratchCanvas');
+            const rect = canvas.getBoundingClientRect();
+
+            const x = (e.clientX || e.pageX) - rect.left;
+            const y = (e.clientY || e.pageY) - rect.top;
+
+            scratchCtx.beginPath();
+            scratchCtx.arc(x, y, 16, 0, Math.PI * 2);
+            scratchCtx.fill();
+
+            checkScratchPercentage();
+        }
+
+        let isConfettiTriggered = false;
+        function checkScratchPercentage() {
+            if (isConfettiTriggered) return;
+
+            const canvas = document.getElementById('scratchCanvas');
+            const imageData = scratchCtx.getImageData(0, 0, canvas.width, canvas.height);
+            let clearedPixels = 0;
+
+            for (let i = 3; i < imageData.data.length; i += 4) {
+                if (imageData.data[i] === 0) clearedPixels++;
+            }
+
+            const percentage = (clearedPixels / (imageData.data.length / 4)) * 100;
+            if (percentage > 45) {
+                isConfettiTriggered = true;
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        function resetScratchTicket() {
+            playPopSound();
+            isConfettiTriggered = false;
+
+            const newReward = appState.coupons[Math.floor(Math.random() * appState.coupons.length)];
+            document.getElementById('scratchRewardText').textContent = newReward;
+
+            fillScratchCover();
+        }
+
+        // --- JAR OF LOVE REASONS ---
+        function drawLoveReason() {
+            playPopSound();
+            const reasonBox = document.getElementById('loveReasonDisplay');
+            const reasonText = document.getElementById('loveReasonText');
+
+            const randomReason = appState.reasons[Math.floor(Math.random() * appState.reasons.length)];
+            reasonText.textContent = `"${randomReason}"`;
+            reasonBox.classList.remove('hidden');
+
+            confetti({
+                particleCount: 30,
+                spread: 50,
+                origin: { y: 0.8 }
+            });
+        }
+
+        // --- STREAMING_CHUNK:Handling real-time Customization Panel logic... ---
+        // --- CUSTOMIZATION DRAWER LOGIC ---
+        function toggleDrawer() {
+            playPopSound();
+            const drawer = document.getElementById('customDrawer');
+            drawer.classList.toggle('translate-x-full');
+
+            // Populate current values
+            document.getElementById('inputName').value = appState.boyfriendName;
+            document.getElementById('inputLetter').value = appState.letterMessage;
+        }
+
+        function saveCustomizations() {
+            playPopSound();
+            const nameVal = document.getElementById('inputName').value.trim();
+            const letterVal = document.getElementById('inputLetter').value.trim();
+            const rewardVal = document.getElementById('inputReward').value.trim();
+
+            if (nameVal) {
+                appState.boyfriendName = nameVal;
+                document.getElementById('displayBoyfriendName').textContent = nameVal;
+                document.querySelectorAll('.letterBoyfriendName').forEach(el => el.textContent = nameVal);
+            }
+
+            if (letterVal) appState.letterMessage = letterVal;
+            if (rewardVal) {
+                appState.coupons.unshift(rewardVal);
+                document.getElementById('scratchRewardText').textContent = rewardVal;
+            }
+
+            toggleDrawer();
+
+            confetti({
+                particleCount: 40,
+                spread: 60,
+                origin: { y: 0.5 }
+            });
+        }
+
+        function updateHeroImage(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('heroImage').src = event.target.result;
+                    playPopSound();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>
